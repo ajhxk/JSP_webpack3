@@ -1,10 +1,16 @@
+const path = require('path')
+
 module.exports = {
     entry: {
-        
+        entry: './src/entry.js',
+        entry2: './src/entry2.js',
     },
-    output: {},
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].js'
+    },
     // 处理文件 css 图片等
     module: {},
     plugins: [],
-    desServer: {},
+    devServer: {},
 }
