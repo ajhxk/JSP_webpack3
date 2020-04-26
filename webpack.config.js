@@ -25,7 +25,10 @@ module.exports = {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: 'css-loader'
+                    use: [
+                        {loader: 'css-loader', options: {importLoaders:1}},
+                        'postcss-loader'
+                    ]
                 })
                 // include: 
                 // exclude:
@@ -45,6 +48,18 @@ module.exports = {
             {
                 test: /\.(htm|html)$/i,
                 loader: 'html-withimg-loader'
+            },
+            {
+                test: /\.less$/,
+                use: ExtractTextPlugin.extract({
+                    use: [{
+                        loader: "css-loader"
+                    }, {
+                        loader: "less-loader"
+                    }],
+                    // use style-loader in development
+                    fallback: "style-loader"
+                })
             }
         ]
     },
@@ -59,7 +74,7 @@ module.exports = {
         }),
         new ExtractTextPlugin({
             filename: ('css/[name].[contenthash].css'),
-            allChunks: true
+            // allChunks: true
         })
     ],
     devServer: {
