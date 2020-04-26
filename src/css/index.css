@@ -2,3 +2,15 @@ body {
     background-color: red;
     color: white;
 }
+
+#tupian {
+    background-image: url(../images/url.png);
+    width: 3183px;
+    height: 4335px;
+}
+
+#logo {
+    background-image: url(../images/logo.png);
+    width: 200px;
+    height: 200px;
+}

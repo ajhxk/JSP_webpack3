@@ -1,6 +1,7 @@
 const path = require('path')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
+const 
 
 module.exports = {
     entry: {
@@ -33,7 +34,7 @@ module.exports = {
                 use:[{
                     loader:'url-loader',
                     options:{
-                        limit:7*1024
+                        limit:500000
                     }
                 }]
             }
