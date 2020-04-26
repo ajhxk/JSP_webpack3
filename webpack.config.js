@@ -1,13 +1,21 @@
 const path = require('path')
+const glob = require('glob')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const PurifyCssPlugin = require('purifycss-webpack')
+
+const ENV = process.env.type;// build/dev
+const isDev = () => ENV === 'dev'
+const isBuild = () => ENV === 'build'
+
 
 const website = {
     publicPath: '/'
 }
 
 module.exports = {
+    devtool: isDev() ? '#source-map' : false,
     entry: {
         entry: './src/entry.js'
     },
@@ -60,11 +68,18 @@ module.exports = {
                     // use style-loader in development
                     fallback: "style-loader"
                 })
+            },
+            {
+                test: /\.(jsx|js)$/,
+                use: [{
+                    loader: 'babel-loader',
+                }],
+                exclude: /node_modules/
             }
         ]
     },
     plugins: [
-        new UglifyJsPlugin(),
+        new UglifyJsPlugin({sourceMap: isDev()}),
         new HtmlPlugin({
             minify: {
                 removeAttributeQuotes: true
@@ -75,6 +90,9 @@ module.exports = {
         new ExtractTextPlugin({
             filename: ('css/[name].[contenthash].css'),
             // allChunks: true
+        }),
+        new PurifyCssPlugin({
+            paths:glob.sync(path.join(__dirname, 'src/*.html'))
         })
     ],
     devServer: {

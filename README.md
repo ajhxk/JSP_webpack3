@@ -31,3 +31,10 @@ html-withimg-loader
 postcss autoprefixer
 
 5.去除无用css 减少冗余
+purifycss-webpack purify-css
+
+6.调试
+source-map 生成独立map 行列
+cheap-module-source-map 生成简单独立map 行
+eval-source-map eval js 开发阶段 上线需删除 行列
+cheap-module-eval-source-map 行
