@@ -6,6 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "set type=build&webpack",
+        "build:watch": "set type=build&webpack --watch",
         "dev": "set type=dev&webpack-dev-server --open"
     },
     "keywords": [],
@@ -16,6 +17,7 @@
         "babel-core": "^6.22.1",
         "babel-loader": "^7.1.1",
         "babel-preset-env": "^1.3.2",
+        "copy-webpack-plugin": "^4.0.1",
         "css-loader": "^3.5.3",
         "extract-text-webpack-plugin": "^3.0.0",
         "file-loader": "^1.1.4",
@@ -34,6 +36,7 @@
         "webpack-dev-server": "^2.8.2"
     },
     "dependencies": {
-        "jquery": "^3.5.0"
+        "jquery": "^3.5.0",
+        "vue": "^2.6.11"
     }
 }

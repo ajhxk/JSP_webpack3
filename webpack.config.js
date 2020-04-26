@@ -4,10 +4,15 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const PurifyCssPlugin = require('purifycss-webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack')
+const ProvidePlugin = webpack.ProvidePlugin;
+const BannerPlugin = webpack.BannerPlugin;
+const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
+const HotModuleReplacementPlugin = webpack.HotModuleReplacementPlugin;
 
-const ENV = process.env.type;// build/dev
-const isDev = () => ENV === 'dev'
-const isBuild = () => ENV === 'build'
+const env = require('./build/env')
+const entry = require('./build/entry')
 
 
 const website = {
@@ -15,10 +20,8 @@ const website = {
 }
 
 module.exports = {
-    devtool: isDev() ? '#source-map' : false,
-    entry: {
-        entry: './src/entry.js'
-    },
+    devtool: env.isDev() ? '#source-map' : false,
+    entry: entry.path,
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
@@ -79,7 +82,24 @@ module.exports = {
         ]
     },
     plugins: [
-        new UglifyJsPlugin({sourceMap: isDev()}),
+        new HotModuleReplacementPlugin(),
+        new CopyWebpackPlugin([{
+            from: __dirname + '/public',
+            to: './public'
+        }]),
+        new CommonsChunkPlugin({
+            name: ['jquery', 'vue'],
+            filename: 'assets/js/[name].js',
+            minChunks: 2
+        }),
+        new BannerPlugin(`
+        hxk
+        `),
+        new ProvidePlugin({
+            $: 'jquery',
+            vue: 'vue'
+        }),
+        new UglifyJsPlugin({sourceMap: env.isDev()}),
         new HtmlPlugin({
             minify: {
                 removeAttributeQuotes: true
@@ -101,4 +121,9 @@ module.exports = {
         compress: true,
         port: 8080
     },
+    watchOptions: {
+        poll: 1000,
+        aggregateTimeout: 500,
+        ignored: /node_modules/
+    }
 }
