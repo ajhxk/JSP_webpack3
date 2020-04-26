@@ -14,3 +14,15 @@ url-loader  控制图片等资源小于阀值时 转成base64
 ### plugins
 uglifyjs-webpack-plugin 压缩js代码
 html-webpack-plugin 处理html
+
+
+#### 如何分离css？
+extract-text-webpack-plugin
+
+#### 静态资源路径问题
+1.url-loader中 options.outputPath 设置处理后的 资源路径
+
+2.output.publicPath 设置 静态资源 路径前缀
+
+3.html中直接用image src引入的图片怎么处理？
+html-withimg-loader

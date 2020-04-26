@@ -1,6 +1,11 @@
 const path = require('path')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+const website = {
+    publicPath: '/'
+}
 
 module.exports = {
     entry: {
@@ -8,7 +13,8 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].js'
+        filename: '[name].js',
+        publicPath: website.publicPath
     },
     // 处理文件 css 图片等
     module: {
@@ -17,12 +23,10 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use: [{
-                    loader: 'style-loader'
-                },
-                {
-                    loader: 'css-loader'
-                }]
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader'
+                })
                 // include: 
                 // exclude:
                 // query:
@@ -33,9 +37,14 @@ module.exports = {
                 use:[{
                     loader:'url-loader',
                     options:{
-                        limit:7*1024
+                        limit:10*1024,
+                        outputPath: 'images/'
                     }
                 }]
+            },
+            {
+                test: /\.(htm|html)$/i,
+                loader: 'html-withimg-loader'
             }
         ]
     },
@@ -48,6 +57,10 @@ module.exports = {
             hash: true,
             template: './src/index.html'
         }),
+        new ExtractTextPlugin({
+            filename: ('css/[name].[contenthash].css'),
+            allChunks: true
+        })
     ],
     devServer: {
         contentBase: path.resolve(__dirname, 'dist'),
